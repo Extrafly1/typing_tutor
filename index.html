@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Клавиатурный тренажёр слепой печати с русской и английской раскладками.">
+  <title>Слепой набор — клавиатурный тренажёр</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-glow page-glow--one" aria-hidden="true"></div>
+  <div class="page-glow page-glow--two" aria-hidden="true"></div>
+
+  <div class="app">
+    <header class="app-header">
+      <a class="brand" href="#" aria-label="Слепой набор — на главную">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="5" width="20" height="14" rx="3"></rect>
+            <path d="M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 13h.01M18 13h.01M9 13h6M7 16h10"></path>
+          </svg>
+        </span>
+        <span class="brand-text">
+          <span class="brand-title">Слепой набор</span>
+          <span class="brand-subtitle">Клавиатурный тренажёр · RU / EN</span>
+        </span>
+      </a>
+
+      <div class="header-controls">
+        <div class="lang-switch" role="group" aria-label="Язык упражнения">
+          <button class="lang-btn is-active" type="button" data-lang="ru" aria-pressed="true">RU</button>
+          <button class="lang-btn" type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+
+        <button class="kb-toggle" id="kbToggle" type="button" aria-expanded="true" title="Скрыть экранную клавиатуру">
+          <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2.06 12.35a1 1 0 0 1 0-.7 10.75 10.75 0 0 1 19.88 0 1 1 0 0 1 0 .7 10.75 10.75 0 0 1-19.88 0Z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m3 3 18 18"></path>
+            <path d="M10.58 10.59a2 2 0 0 0 2.83 2.83"></path>
+            <path d="M9.36 5.37A9.47 9.47 0 0 1 12 5c4 0 7.5 2.5 9.5 7a10.9 10.9 0 0 1-2.2 3.06"></path>
+            <path d="M6.1 6.1A10.9 10.9 0 0 0 2.5 12c2 4.5 5.5 7 9.5 7 1.35 0 2.62-.28 3.8-.79"></path>
+          </svg>
+          <span id="kbToggleLabel">Скрыть клавиатуру</span>
+        </button>
+      </div>
+    </header>
+
+    <nav class="lessons" aria-label="Выбор упражнения">
+      <button class="chip is-active" type="button" data-lesson="home" aria-pressed="true">Домашний ряд</button>
+      <button class="chip" type="button" data-lesson="top" aria-pressed="false">Верхний ряд</button>
+      <button class="chip" type="button" data-lesson="bottom" aria-pressed="false">Нижний ряд</button>
+      <button class="chip" type="button" data-lesson="all" aria-pressed="false">Все буквы</button>
+      <button class="chip" type="button" data-lesson="words" aria-pressed="false">Слова</button>
+      <button class="chip" type="button" data-lesson="sentences" aria-pressed="false">Предложения</button>
+    </nav>
+
+    <main>
+      <section class="stats-grid" aria-label="Статистика упражнения">
+        <article class="stat-card">
+          <div class="stat-head"><span>Скорость</span><span class="stat-icon">↗</span></div>
+          <div class="stat-value"><span id="statWpm">0</span><small>слов/мин</small></div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-head"><span>Точность</span><span class="stat-icon">◎</span></div>
+          <div class="stat-value"><span id="statAccuracy">100</span><small>%</small></div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-head"><span>Время</span><span class="stat-icon">◷</span></div>
+          <div class="stat-value"><span id="statTime">0:00</span><small>мин:сек</small></div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-head"><span>Ошибки</span><span class="stat-icon">!</span></div>
+          <div class="stat-value"><span id="statErrors">0</span><small>раз</small></div>
+        </article>
+      </section>
+
+      <section class="typing-card" id="typingCard" aria-label="Упражнение">
+        <div class="exercise-bar">
+          <div class="exercise-info">
+            <span class="lang-tag" id="langTag">RU</span>
+            <span class="exercise-sep"></span>
+            <span id="lessonName">Домашний ряд</span>
+          </div>
+          <span class="shortcut-hint"><kbd>Esc</kbd> — заново</span>
+        </div>
+
+        <div class="text-display" id="textDisplay" aria-label="Текст упражнения"></div>
+
+        <div class="progress-row">
+          <div class="progress-track" id="progressTrack" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <span class="progress-value" id="progressValue">0%</span>
+        </div>
+
+        <div class="typing-bottom">
+          <div class="status-line" id="statusLine" data-kind="info">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span id="statusText">Начните печатать — таймер запустится автоматически.</span>
+          </div>
+          <div class="typing-actions">
+            <button class="btn btn-ghost" id="restartBtn" type="button" title="Заново (Esc)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path><path d="M3 3v5h5"></path></svg>
+              Заново
+            </button>
+            <button class="btn btn-primary" id="newTextBtn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"></path><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15Z"></path></svg>
+              Новый текст
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="keyboard-shell" id="keyboardShell" aria-label="Экранная клавиатура">
+        <div class="keyboard-card">
+          <div class="keyboard-head">
+            <div>
+              <h2>Клавиатура</h2>
+              <p>Подсветка показывает следующую клавишу, цвет полоски — палец.</p>
+            </div>
+            <div class="next-hint" id="nextHint" title="Следующая клавиша">
+              <span class="next-dot" id="nextDot"></span>
+              <span class="next-label">Дальше:</span>
+              <strong id="nextChar">—</strong>
+            </div>
+          </div>
+
+          <div class="keyboard-scroll">
+            <div class="keyboard" id="keyboard"></div>
+          </div>
+
+          <div class="finger-legend" aria-label="Обозначения пальцев">
+            <span><i style="--dot:#f472b6"></i>Мизинцы</span>
+            <span><i style="--dot:#fbbf24"></i>Безымянные</span>
+            <span><i style="--dot:#34d399"></i>Средние</span>
+            <span><i style="--dot:#60a5fa"></i>Указательные</span>
+            <span><i style="--dot:#a78bfa"></i>Большие</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>Смотрите на экран, а не на руки. Ровный ритм важнее скорости.</p>
+      <p>Нужная раскладка: <strong id="footerLayout">русская</strong></p>
+    </footer>
+  </div>
+
+  <div class="result-overlay" id="resultOverlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+    <div class="result-card">
+      <button class="result-close" id="resultClose" type="button" aria-label="Закрыть результат">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+      </button>
+      <div class="result-badge" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4.5 4.5L19 7"></path></svg>
+      </div>
+      <h2 id="resultTitle">Упражнение завершено</h2>
+      <p class="result-subtitle" id="resultSubtitle">Отличный результат!</p>
+
+      <div class="result-stats">
+        <div><span id="resultWpm">0</span><small>слов/мин</small></div>
+        <div><span id="resultAccuracy">100</span><small>% точность</small></div>
+        <div><span id="resultTime">0:00</span><small>время</small></div>
+        <div><span id="resultErrors">0</span><small>ошибок</small></div>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn btn-ghost" id="resultRetry" type="button">Повторить</button>
+        <button class="btn btn-primary" id="resultNext" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"></path></svg>
+          Новый текст
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
